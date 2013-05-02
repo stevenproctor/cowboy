@@ -16,7 +16,7 @@ start(_Type, _Args) ->
 			{"/", toppage_handler, []}
 		]}
 	]),
-	{ok, _} = cowboy:start_https(https, 100, [
+	{ok, _} = cowboy:start_spdy(spdy, 100, [
 		{port, 8443},
 		{cacertfile, "priv/ssl/cowboy-ca.crt"},
 		{certfile, "priv/ssl/server.crt"},

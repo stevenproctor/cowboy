@@ -173,7 +173,9 @@ stream_status(Client=#client{state=State, buffer=Buffer})
 		when State =:= request ->
 	case binary:split(Buffer, <<"\r\n">>) of
 		[Line, Rest] ->
-			parse_status(Client#client{state=response, buffer=Rest}, Line);
+			{Version, StatusCode, StatusStr} = cowboy_http:status_line(Line),
+			{ok, StatusCode, StatusStr,
+				Client#client{state=response, buffer=Rest, version=Version}};
 		_ ->
 			case recv(Client) of
 				{ok, Data} ->
@@ -183,14 +185,6 @@ stream_status(Client=#client{state=State, buffer=Buffer})
 					{error, Reason}
 			end
 	end.
-
-parse_status(Client, << "HTTP/", High, ".", Low, " ",
-		S3, S2, S1, " ", StatusStr/binary >>)
-		when High >= $0, High =< $9, Low >= $0, Low =< $9,
-			S3 >= $0, S3 =< $9, S2 >= $0, S2 =< $9, S1 >= $0, S1 =< $9 ->
-	Version = {High - $0, Low - $0},
-	Status = (S3 - $0) * 100 + (S2 - $0) * 10 + S1 - $0,
-	{ok, Status, StatusStr, Client#client{version=Version}}.
 
 stream_headers(Client=#client{state=State})
 		when State =:= response ->

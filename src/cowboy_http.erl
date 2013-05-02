@@ -38,6 +38,8 @@
 -export([quoted_string/2]).
 -export([authorization/2]).
 -export([range/1]).
+-export([status_line/1]).
+-export([status/1]).
 
 %% Decoding.
 -export([te_chunked/2]).
@@ -901,6 +903,19 @@ range_digits(Data, Default, Fun) ->
 		   (_) ->
 			Fun(Data, Default)
 		end).
+
+-spec status_line(binary()) -> {version(), status(), binary()}.
+status_line(<< "HTTP/", High, ".", Low, " ", Status/binary >>)
+		when High >= $0, High =< $9, Low >= $0, Low =< $9 ->
+	Version = {High - $0, Low - $0},
+	{StatusCode, StatusStr} = status(Status),
+	{Version, StatusCode, StatusStr}.
+
+-spec status(binary()) -> {status(), binary()}.
+status(<< S3, S2, S1, " ", StatusStr/binary >>)
+		when S3 >= $0, S3 =< $9, S2 >= $0, S2 =< $9, S1 >= $0, S1 =< $9 ->
+	StatusCode = (S3 - $0) * 100 + (S2 - $0) * 10 + S1 - $0,
+	{StatusCode, StatusStr}.
 
 %% Decoding.
 

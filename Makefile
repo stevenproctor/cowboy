@@ -5,7 +5,7 @@ PROJECT = cowboy
 # Options.
 
 COMPILE_FIRST = cowboy_middleware cowboy_sub_protocol
-CT_SUITES = eunit http ws
+CT_SUITES = spdy
 PLT_APPS = crypto public_key ssl
 
 # Dependencies.
