@@ -222,7 +222,7 @@ version(Req) ->
 
 %% @doc Return the peer address and port number of the remote host.
 -spec peer(Req)
-	-> {undefined | {inet:ip_address(), inet:port_number()}, Req}
+	-> {{inet:ip_address(), inet:port_number()}, Req}
 	when Req::req().
 peer(Req) ->
 	{Req#http_req.peer, Req}.
@@ -480,14 +480,14 @@ parse_header(Name, Req=#http_req{p_headers=PHeaders}, Default, Fun) ->
 
 %% @equiv cookie(Name, Req, undefined)
 -spec cookie(binary(), Req)
-	-> {binary() | true | undefined, Req} when Req::req().
+	-> {binary() | undefined, Req} when Req::req().
 cookie(Name, Req) when is_binary(Name) ->
 	cookie(Name, Req, undefined).
 
 %% @doc Return the cookie value for the given key, or a default if
 %% missing.
 -spec cookie(binary(), Req, Default)
-	-> {binary() | true | Default, Req} when Req::req(), Default::any().
+	-> {binary() | Default, Req} when Req::req(), Default::any().
 cookie(Name, Req=#http_req{cookies=undefined}, Default) when is_binary(Name) ->
 	case parse_header(<<"cookie">>, Req) of
 		{ok, undefined, Req2} ->
@@ -502,7 +502,7 @@ cookie(Name, Req, Default) ->
 	end.
 
 %% @doc Return the full list of cookie values.
--spec cookies(Req) -> {list({binary(), binary() | true}), Req} when Req::req().
+-spec cookies(Req) -> {list({binary(), binary()}), Req} when Req::req().
 cookies(Req=#http_req{cookies=undefined}) ->
 	case parse_header(<<"cookie">>, Req) of
 		{ok, undefined, Req2} ->
@@ -608,7 +608,7 @@ stream_body(Req) ->
 %% for each streamed part, and {done, Req} when it's finished streaming.
 %%
 %% You can limit the size of the chunks being returned by using the
-%% second argument which is the size in bytes. It defaults to 1000000 bytes.
+%% first argument which is the size in bytes. It defaults to 1000000 bytes.
 -spec stream_body(non_neg_integer(), Req) -> {ok, binary(), Req}
 	| {done, Req} | {error, atom()} when Req::req().
 stream_body(MaxLength, Req=#http_req{body_state=waiting, version=Version,
@@ -787,9 +787,6 @@ body_qs(MaxBodyLength, Req) ->
 %% this function returns <em>{headers, Headers}</em> followed by a sequence of
 %% <em>{body, Data}</em> tuples and finally <em>end_of_part</em>. When there
 %% is no part to parse anymore, <em>eof</em> is returned.
-%%
-%% If the request Content-Type is not a multipart one, <em>{error, badarg}</em>
-%% is returned.
 -spec multipart_data(Req)
 	-> {headers, cowboy_http:headers(), Req} | {body, binary(), Req}
 		| {end_of_part | eof, Req} when Req::req().
