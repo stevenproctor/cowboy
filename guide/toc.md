@@ -8,39 +8,83 @@ Introducing Cowboy
 ------------------
 
  *  [Introduction](introduction.md)
-   *  Purpose
-   *  Prerequisites
-   *  Supported platforms
-   *  Conventions
  *  [The modern Web](modern_web.md)
-   *  The prehistoric Web
-   *  HTTP/1.1
-   *  REST
-   *  Long-polling
-   *  HTML5
-   *  EventSource
-   *  Websocket
-   *  SPDY
-   *  HTTP/2.0
  *  [Erlang and the Web](erlang_web.md)
-   *  The Web is concurrent
-   *  The Web is soft real time
-   *  The Web is asynchronous
-   *  The Web is omnipresent
-   *  Erlang is the ideal platform for the Web
  *  [Erlang for beginners](erlang_beginners.md)
  *  [Getting started](getting_started.md)
+
+HTTP
+----
+
+ *  [The life of a request](http_req_life.md)
+ *  [Routing](routing.md)
+ *  Handling plain HTTP requests
+ *  The Req object
+ *  Reading the request body
+ *  Sending a response
+
+Static files
+------------
+
+ *  [Static handlers](static_handlers.md)
+ *  Distributed CDN solutions
+
+REST
+----
+
+ *  REST principles
+ *  Media types explained
+ *  HTTP caching
+ *  Handling REST requests
+ *  HEAD/GET requests flowchart
+ *  POST/PUT/PATCH requests flowchart
+ *  DELETE requests flowchart
+ *  OPTIONS requests flowchart
+ *  Designing a REST API
+
+Multipart
+---------
+
+ *  Understanding multipart
+ *  Multipart requests
+ *  Multipart responses
+
+Server push technologies
+------------------------
+
+ *  Push technologies
+ *  Using loop handlers for server push
+ *  CORS
+
+Using Websocket
+---------------
+
+ *  The Websocket protocol
+ *  Handling Websocket connections
+
+Advanced HTTP
+-------------
+
+ *  Authentication
+ *  Sessions
+
+Advanced Cowboy usage
+---------------------
+
+ *  Optimization guide
+ *  [Hooks](hooks.md)
+ *  [Middlewares](middlewares.md)
+ *  Access and error logs
+ *  Handling broken clients
+   *  HTTP header names
+   *  HTTP/1.1 streaming not chunked
+
+
+
 
 Using Cowboy
 ------------
 
- *  [Routing](routing.md)
-   *  Purpose
-   *  Structure
-   *  Match syntax
-   *  Constraints
-   *  Compilation
-   *  Live update
  *  [Handlers](handlers.md)
    *  Purpose
    *  Protocol upgrades
@@ -62,7 +106,6 @@ Using Cowboy
    *  Callbacks
    *  Meta data
    *  Response headers
- *  [Static handlers](static_handlers.md)
    *  Purpose
    *  Usage
    *  MIME type
@@ -76,15 +119,6 @@ Using Cowboy
    *  Response preconfiguration
    *  Closing the connection
    *  Reducing the memory footprint
- *  [Hooks](hooks.md)
-   *  On request
-   *  On response
- *  [Middlewares](middlewares.md)
-   *  Purpose
-   *  Usage
-   *  Configuration
-   *  Routing middleware
-   *  Handler middleware
  *  [Internals](internals.md)
    *  Architecture
    *  One process for many requests
